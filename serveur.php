@@ -14,24 +14,18 @@ if(isset($_GET['method']) && $_GET['method'] != '') {
 
 switch ($method) {
 
-  case 'getUserData':
-  $data = array(
-    "Status"=>'2',
-    "Msg"=>'Methode getUserData'
-  );
-  header('Content-type: application/json');
-  print json_encode(array('data'=>$data));
-  break;
-
-  case 'Login':
-  $data = array(
-    "Code"=>'1',
-    "Status"=>'200',
-    "Data"=>'Hello World'
-  );
-  header('Content-type: application/json');
-  print json_encode(array('data'=>$data));
-  break;
+  case 'getGameInformation':
+  $url = "opengamedb.org/api/getGame/1";
+  $xml = file_get_contents("$url", False, $cxContext);
+  $chaine = new SimpleXMLElement($xml);
+  
+  if(isset($chaine)) {
+	  print "Titre : $chaine->title";
+  }
+  else {
+	  print "Erreur".utf8_decode($xml->error);
+  }
+  break:
 
   default:
   $params = array("status"=>0, "msg"=>'Invalid Parameters Supplied');
